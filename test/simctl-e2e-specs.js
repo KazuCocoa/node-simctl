@@ -4,7 +4,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard,
+import { createDevice, cloneDevice, deleteDevice, eraseDevice, getDevices, setPasteboard,
          getPasteboard, bootDevice, launch, shutdown, addMedia, appInfo,
          getDeviceTypes } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
@@ -53,6 +53,18 @@ describe('simctl', function () {
 
   it('should create a device', async function () {
     let udid = await createDevice(randName, DEVICE_NAME, _.last(validSdks));
+    (typeof udid).should.equal('string');
+    udid.length.should.equal(36);
+  });
+
+  it('should clone a device without destinations', async function () {
+    let udid = await cloneDevice(randName, `new ${randName}`);
+    (typeof udid).should.equal('string');
+    udid.length.should.equal(36);
+  });
+
+  it('should clone a device', async function () {
+    let udid = await cloneDevice(randName, `new ${randName}`, ['a', 'b']);
     (typeof udid).should.equal('string');
     udid.length.should.equal(36);
   });
